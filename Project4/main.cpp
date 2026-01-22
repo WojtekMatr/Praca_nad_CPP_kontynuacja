@@ -8,6 +8,7 @@
 #include <iostream>
 #include <set>
 #include <iomanip>
+#include <string>
 
 int main() {
 	//Na start chcialbym przeanalizowac wszystkie struktury danych i czym sie roznia:
@@ -30,7 +31,7 @@ int main() {
 		std::cout << x << " ";
 	}
 	std::cout << "\n";
-
+	std::vector<int> a{ 1,2,3,4 };// dziala bo ma w sobie initializer_list
 	vec.resize(15, 0);// zwiekszam rozmiar o 5 (zupelnie nie potrzebne poniewaz rozmiar vectora jest dynamiczny) powstale miejsca sa zajete przez 0 
 	vec.pop_back(); // usuwa ostatni
 	vec.erase(vec.begin() + 1); // zmazuje
@@ -149,18 +150,41 @@ int main() {
 	system("cls");	 //Windows
 	//system("clear"); //Linux/mac
 	//KONTENERY ASOCJACYJNE
-	Punkt a{1.0,2.0};
-	//std::set<Punkt> przestrzen;
-	std::set<Punkt> zbiorPunktow;
+	// 
+	std::set<Punkt1> zbiorPunktow1;
 	
 	while (j < 10) {
-		zbiorPunktow.insert({rozkl(gen),rozkl(gen)});
+		zbiorPunktow1.insert({rozkl(gen),rozkl(gen)});
 		j++;
 	}
-
-	for (auto i : zbiorPunktow) {
-		std::cout << "P(" <<std::fixed<<std::setprecision(5)<< i.a << "," << i.b << ") \n";
+	std::cout << "Zbior punktow w set upozatkowanych w kolejnosci punktu A\n";
+	for (auto i : zbiorPunktow1) {
+		std::cout << "P(" <<std::fixed<<std::setprecision(1)<< i.a << "," << i.b << ") \n";
 	}
+	std::set<Punkt2> zbiorPunktow2;
+	j = 0;
+	while (j < 10) {
+		zbiorPunktow2.insert({ rozkl(gen),rozkl(gen) });
+		j++;
+	}
+	std::cout << "Zbior punktow w set upozatkowanych w kolejnosci punktu B\n";
+	for (auto i : zbiorPunktow2) {
+		std::cout << "P(" << std::fixed << std::setprecision(1) << i.a << "," << i.b << ") \n";
+	}
+	OperatorowySet<int> liczby1{10, 9, 8, 4, 6, 2, 4, 1, 6, 2, 2, 4, 1};
+	OperatorowySet<int> liczby2;
+	for (int i = -20; i < 20; i += 4) {
+		liczby2.add(i);
+	}
+	
+	OperatorowySet<std::string> imiona{"Ola", "Michal", "Maciek", "Kamil", "Krystian", "Anna"};
+	std::cout << liczby1<<"\n";
+	std::cout << liczby2 << "\n";
+	auto liczby3 = liczby1+liczby2;// suma zbiorow
+	std::cout << liczby3 << "\n";
+	auto liczby4 = liczby1 += liczby2; // zabawa z operatorem += w moim programie pracuje on jako suma po kolei elementow setu, nie powinno sie wykorzystywac setu do takich zadan
+	std::cout << liczby4 << "\n"; //ani takiego operatora jednak ciekawy bylem czy tak sie da;
+	std::cout << imiona<<"\n";
 
 
 }
