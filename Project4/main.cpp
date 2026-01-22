@@ -9,6 +9,7 @@
 #include <set>
 #include <iomanip>
 #include <string>
+#include <map>
 
 int main() {
 	//Na start chcialbym przeanalizowac wszystkie struktury danych i czym sie roznia:
@@ -171,13 +172,13 @@ int main() {
 	for (auto i : zbiorPunktow2) {
 		std::cout << "P(" << std::fixed << std::setprecision(1) << i.a << "," << i.b << ") \n";
 	}
-	OperatorowySet<int> liczby1{10, 9, 8, 4, 6, 2, 4, 1, 6, 2, 2, 4, 1};
+	OperatorowySet<int, std::set> liczby1{10, 9, 8, 4, 6, 2, 4, 1, 6, 2, 2, 4, 1};
 	OperatorowySet<int> liczby2;
 	for (int i = -20; i < 20; i += 4) {
 		liczby2.add(i);
 	}
 	
-	OperatorowySet<std::string> imiona{"Ola", "Michal", "Maciek", "Kamil", "Krystian", "Anna"};
+	OperatorowySet<std::string, std::set> imiona{"Ola", "Michal", "Maciek", "Kamil", "Krystian", "Anna"};
 	std::cout << liczby1<<"\n";
 	std::cout << liczby2 << "\n";
 	auto liczby3 = liczby1+liczby2;// suma zbiorow
@@ -185,6 +186,92 @@ int main() {
 	auto liczby4 = liczby1 += liczby2; // zabawa z operatorem += w moim programie pracuje on jako suma po kolei elementow setu, nie powinno sie wykorzystywac setu do takich zadan
 	std::cout << liczby4 << "\n"; //ani takiego operatora jednak ciekawy bylem czy tak sie da;
 	std::cout << imiona<<"\n";
+
+
+	std::map<std::string, int> wzrost; // map ma indeks 1 po ktorym sortuje i 2 element to zawartosc po ktorej nie sortuje
+	std::cout << "Map string int: \n";
+	
+	wzrost["Ala"] = 150;
+	wzrost["Alan"] = 149;
+	wzrost["Aaron"] = 151;//aron bedzie 1 bo jest najnizej w slowniku 
+	//std map 
+	
+	//for (const auto& [klucz, wartosc] : wzrost) { Mapowanie standard C++17
+	//	std::cout << klucz << ": " << wartosc << '\n';
+	//}
+
+	for (const auto& elem : wzrost) { // elem to taki struct z elemtami w naszym wypadku 2 first secound (1 indeks, 2 obiekt)
+		std::cout << elem.first << " " << elem.second << '\n';
+	}
+	std::map< int,Punkt1> punkty;
+	//Punkt1 b{ rozkl(gen), rozkl(gen) };
+	for (auto i = 10; i > 0; i--) {
+		punkty[i] = { rozkl(gen), rozkl(gen) };
+
+	}
+	std::cout << "Map <int, struct Punkt(double, double)>: \n";
+	for (const auto& elem : punkty) { // elem to taki struct z elemtami w naszym wypadku 2 first secound (1 indeks, 2 obiekt)
+		std::cout << elem.first << " " << elem.second.a << " "<< elem.second.b <<'\n';
+	}
+
+	std::map< Punkt1, int> punkty2;
+	for (auto i = 10; i > 0; i--) {
+		punkty2[{ rozkl(gen), rozkl(gen) }] = i;
+
+	}
+	std::cout << "Map <struct Punkt1(double, double),int, sortowanie po 1 double>: \n";
+	for (const auto& elem : punkty2) { // elem to taki struct z elemtami w naszym wypadku 2 first secound (1 indeks, 2 obiekt)
+		std::cout << elem.first.a << " " << elem.first.b << " " << elem.second<< '\n';
+	}
+
+	std::map< Punkt2, int> punkty3;
+	for (auto i = 10; i > 0; i--) {
+		punkty3[{ rozkl(gen), rozkl(gen) }] = i;
+
+	}
+	std::cout << "Map <struct Punkt2(double, double),int, sortowanie po 2 double>: \n";
+	for (const auto& elem : punkty3) { // elem to taki struct z elemtami w naszym wypadku 2 first secound (1 indeks, 2 obiekt)
+		std::cout << elem.first.a << " " << elem.first.b << " " << elem.second << '\n';
+	}
+	//STD::MULTIMAP i STD::MULTISET
+	
+	//std::multiset Kontener podobny do set, przechowuje elementy w kolejnosci rosnacej
+	//glowna roznica - moze miec duplikaty
+	// 
+	//multiset przekopiowane z set'a ale inny wynik
+	OperatorowySet<int, std::multiset> liczby5{ 10, 9, 8, 4, 6, 2, 4, 1, 6, 2, 2, 4, 1 };
+	OperatorowySet<int, std::multiset> liczby6;
+	for (int i = -20; i < 20; i+= 4) {
+		liczby6.add(i);
+	}
+	std::cout << liczby5 << "\n";
+	std::cout << liczby6 << "\n";
+	auto liczby7 = liczby5 + liczby6;// suma zbiorow
+	std::cout << liczby7 << "\n";
+	auto liczby8 = liczby5 += liczby6; // zabawa z operatorem += w moim programie pracuje on jako suma po kolei elementow setu, nie powinno sie wykorzystywac setu do takich zadan
+	std::cout << liczby8 << "\n";
+
+
+	// Inne kontenery na pozniej
+
+	//algorytmy Stl - zrobione na labolatoriach
+
+	//Iteratory potrafie
+
+	//Szablony - potrafie, metaprogramowanie poczytac co to dokladnie
+
+	//Przeciazanie operatorow potrafie
+
+	//Zarzadzanie pamiecia i wkazniki unique_ptr, shared_ptr, weak_ptr , RAII - WROCIC
+
+	// Wlasne kontenery robilem w C
+
+	// WROCIC Algorytymy <numeric>, stack, queue, Adaptory kontenerow, strumieniowanie, inserter
+
+	//Singleton, Factory, Observer, RAII, Adapter, Strategy
+
+	//Algorytmy równoleg³e (std::execution), Concurrent containers i mutexy, Multithreading, chrono
+
 
 
 }
