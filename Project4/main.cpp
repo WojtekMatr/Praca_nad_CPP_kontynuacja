@@ -10,6 +10,9 @@
 #include <iomanip>
 #include <string>
 #include <map>
+#include <iomanip> //wyrownuje cout'y
+#include <unordered_set>
+#include <unordered_map>
 
 int main() {
 	//Na start chcialbym przeanalizowac wszystkie struktury danych i czym sie roznia:
@@ -250,6 +253,57 @@ int main() {
 	std::cout << liczby7 << "\n";
 	auto liczby8 = liczby5 += liczby6; // zabawa z operatorem += w moim programie pracuje on jako suma po kolei elementow setu, nie powinno sie wykorzystywac setu do takich zadan
 	std::cout << liczby8 << "\n";
+
+	//multimap
+	std::multimap<std::string, int> wzrostmultimap; // map ma indeks 1 po ktorym sortuje i 2 element to zawartosc po ktorej nie sortuje
+	std::cout << "Map string int: \n";
+
+	//wzrostmultimap["Ala"] = 150; nie - dziala to tylko dla map
+	wzrostmultimap.insert({ "Ala", 150 });
+	wzrostmultimap.insert({ "Ala", 151 });
+	wzrostmultimap.insert({ "Ala", 152 });
+	wzrostmultimap.insert({ "Ala", 150 });
+	wzrostmultimap.insert({ "Aaron", 151 });
+
+	//std map 
+	
+	for (auto i : wzrostmultimap) {
+		std::cout << std::left << "Indeks: " << std::setw(8)<< i.first << " Wartosc: " << i.second << "\n";
+	}
+	//Kontenery Asocjacyjne Nieuporz¹dkowane
+	//Dzialaja w oparciu o hash tables. Nie gwarantuja kolejnosci ale oferuja srednio najszybszy dostep
+	
+	std::cout << "\n Kontenery Asocjacyjne Nieuporzadkowane, wcisnij przycisk";
+	std::cin.get();
+	system("cls");
+
+	std::unordered_map<int, int> licz1 = { {1,1},{1,1}, { 1,2 },{2,3},{4,1}, {4,2},{6,5}, {5,5}, {4,8}, {9,1} };
+	licz1[-2] = 7;
+	licz1.insert({ 6,3 });
+	int l = 4;
+
+	for (const auto& i : licz1) {
+		std::cout << "P(" << i.first << "," << i.second<<") ";
+
+	}
+	std::cout << "\n";
+	for (const auto& elem : punkty) { 
+		std::cout << elem.first << " " << elem.second.a << " " << elem.second.b << '\n';
+	}
+
+		if (licz1.find(l) != licz1.end()) {
+			std::cout << "Liczbie : " << l << " odpowiada: " << licz1[l] << "\n";
+		
+		}
+
+
+
+		std::cout << "No to co czas na Adapterty kontenerow \n";
+		
+		std::cin.get();
+		system("cls");
+
+
 
 
 	// Inne kontenery na pozniej
