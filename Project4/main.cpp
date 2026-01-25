@@ -13,9 +13,18 @@
 #include <iomanip> //wyrownuje cout'y
 #include <unordered_set>
 #include <unordered_map>
-
+#include <stack>
+#include <queue>
+#include "nlohmann/json.hpp" // biblioteka zewnetrzna do obslugi json
+#include <fstream>
+#include <clocale>// slaby sposob na tworzenie znakow polskich w terminalu (lepszy to Windows.h) i kodowanie wyjscia na UTF-8 SetConsoleOutputCP(65001); 
+#include <Windows.h>
 int main() {
+	SetConsoleOutputCP(65001);
+	SetConsoleCP(65001);
 	//Na start chcialbym przeanalizowac wszystkie struktury danych i czym sie roznia:
+
+
 
 
 	std::random_device rd;					// Ÿród³o losowosci
@@ -302,6 +311,106 @@ int main() {
 		
 		std::cin.get();
 		system("cls");
+		
+		std::cout << "Kontener stack-stos jest to kontener bez iteratorow tylko z 3 glownymi funkcjami \n";
+		std::cout << "pop()- wyrzuca z gory, top()- zwraca element z gory, push()- dodaje na gore\n";
+		std::cout << "czyli dzieje sie tu Lifo - last Last in, First Out (dotyczy jednego elementu- jak jest ostatni 1 zwrocimy\n)";
+
+		std::stack<std::string> stosStringow;
+		stosStringow.push("Adam");
+		stosStringow.push("Tomek");
+		for (int i = 97; i < 123; i++) {
+			stosStringow.push(std::string(3,(char)i));
+
+		}
+		auto kopia = stosStringow;
+		while (!kopia.empty()) {
+			std::cout << kopia.top() << std::endl;
+			kopia.pop();
+		}
+
+		std::uniform_int_distribution<> rozkNat(0, 533);
+
+		std::ifstream f("imiona.json");
+		nlohmann::json data = nlohmann::json::parse(f);
+		std::cout << data[1] << data[2]<< std::endl;
+		std::cout << data.size() << std::endl;
+		std::stack<std::string> imionaStos;
+		std::cout << "Random: " << (int)rozkl(gen) << " " << (int)rozkl(gen) << " " << (int)rozkl(gen) << std::endl;
+		for (int i = 0; i < 200; i++) {
+			//std::cout << "Modulo 533 to: " << (rozkNat(gen) % 533) << " ";
+			imionaStos.push(data[(int)rozkNat(gen) % 533]);
+		}
+		auto kopiaImonaStos = imionaStos;
+		while (!kopiaImonaStos.empty()) {
+			std::cout << "Imie na gorze: " << kopiaImonaStos.top() << "\n";
+			kopiaImonaStos.pop();
+		}
+		std::cout << "Problem, terminal nie obsluguje naszego jezyka (znakow specjalnych)\n";
+		//setlocale(LC_ALL, "Polish"); //uzywa ustawien regionalnych 
+		kopiaImonaStos = imionaStos;
+		std::cout << " Cos sie popsulo z polskimi znakami, spobujmy to zmienic" << std::endl;
+		std::cin.get();
+		std::cout << "Za¿ó³æ gêœl¹ jaŸñ – polskie znaki dzia³aj¹!" << std::endl;
+		std::cin.get();
+		while (!kopiaImonaStos.empty()) {
+			std::cout << "Imie na gorze: " << kopiaImonaStos.top() << "\n";
+			kopiaImonaStos.pop();
+		}
+		std::cout << "O nie setlocale zawodzi, to dlatego ze nie byl ustawiony kiedy przepisywalismy pliki z JSON'a do naszego kontenera: "<<std::endl;
+		//zadanie na przyszlosc zrobic tak zeby zamienic zle znaki na poprawne
+		std::cout<<("Wcisnij klawisz \n");
+		std::cin.get();
+		system("cls");
+		std::cout << "Ciezko by bylo przelozyc teraz gotowy Stos z blednymi wartosciami (odbieranie strumienia wchodzacego) wiec zrobmy nowy \n";
+		while(!imionaStos.empty()) {
+			imionaStos.pop();
+		}
+		data.clear();
+		f.close();
+
+		std::ifstream g("imiona.json");
+		data = nlohmann::json::parse(g);
+
+		for (int i = 0; i < 100; i++) {
+			imionaStos.push(data[(int)rozkNat(gen) % 533]);
+		}
+		kopiaImonaStos = imionaStos;
+		while (!kopiaImonaStos.empty()) {
+			std::cout << "Imie na gorze: " << kopiaImonaStos.top() << "\n";
+			kopiaImonaStos.pop();
+		}
+
+		std::cin.get();
+		system("cls");
+
+		//roznica miedzy queue a stack:
+		// stack daje dostep tylko do jednego konca (top())
+		// queue daje dostep do 2 koncow poczatek i koniec (fron(), back())
+		// Kontenery to nakladki nie kazdy kontener moze sie nadac do roznych zawartosci:
+		// dla stack mozna uzyc wszystkiego: vector, decque, list
+		// dla queue nie mozesz uzyc vector, kolejka wymaga usuwania elementow z przodu,
+		// kolejka akceptuje tylko deque, list
+		//
+		std::queue<std::string> imionaKolejka;
+		for (auto i = 0; i < 100; i++) {
+			imionaKolejka.emplace(data[rozkNat(gen) % 533]); // dobry nawyk emplace zamiast push, emplace odrazu wklada gotowy element do konteneraa gdy push tworzy element i kopiuje do kontenera
+		}
+		auto kopiaImionaKolejka = imionaKolejka;
+		while (!(kopiaImionaKolejka.empty()) && kopiaImionaKolejka.size()!= 1) {
+			std::cout << "Z przodu " << kopiaImionaKolejka.front() << " Z tylu "<< kopiaImionaKolejka.back()<<std::endl;
+			kopiaImionaKolejka.pop();
+
+
+		}
+		if (kopiaImionaKolejka.size() == 1) {
+			std::cout << "Ostatni element to nasz koncowy front i back:" << kopiaImionaKolejka.front() << " "<< kopiaImionaKolejka.back()<<std::endl;
+		}
+
+
+
+
+
 
 
 
