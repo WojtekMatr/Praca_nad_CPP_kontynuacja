@@ -19,6 +19,7 @@
 #include <fstream>
 #include <clocale>// slaby sposob na tworzenie znakow polskich w terminalu (lepszy to Windows.h) i kodowanie wyjscia na UTF-8 SetConsoleOutputCP(65001); 
 #include <Windows.h>
+#include <algorithm>
 int main() {
 	SetConsoleOutputCP(65001);
 	SetConsoleCP(65001);
@@ -407,15 +408,143 @@ int main() {
 			std::cout << "Ostatni element to nasz koncowy front i back:" << kopiaImionaKolejka.front() << " "<< kopiaImionaKolejka.back()<<std::endl;
 		}
 
+	//Algorytmy
+		std::cout << "ALGORYTMY \n";
+		std::cin.get();
+		system("cls");
+		std::cout << "Algorytmy niemodyfikujace" << std::endl;
+		std::vector<int> k = { 2,4,6,8,10,10 };
+		std::cout << "Mamy wektor 2,4,6,8,10" << std::endl;
+		//all_of
+		std::cout <<"all_of podzielnosc przez 4: "<< std::all_of(k.begin(), k.end(), [](int x) {
+			return x % 4 == 0;
+			}) 
+			<< std::endl;
+		std::cout << "any_of podzielnosc przez 4"<< std::any_of(k.begin(), k.end(), [](int x) {
+			return x % 4 == 0;
+			})
+			<< std::endl;
+		std::cout << "for_each podzielnosc przez 4 ";
+		std::for_each(k.begin(), k.end(), [](int x) {
+			std::cout << x << " % 4 bez reszty to " << (x % 4 == 0) << ", ";
+			});
+		std::cout << "count wartosc 4 ";
+		std::cout<< std::count(k.begin(), k.end(), 4)<< std::endl;
+		std::cout << "count_if podzielnosc przez 4 " << std::count_if(k.begin(), k.end(), [](int x) {
+			return x % 4 == 0;
+			})
+			<< std::endl;
+
+		std::cout << "find wartosc 4 " << *std::find(k.begin(),k.end(), 4)<<std::endl;//pointer dziala ale tylko dla vectora dla innych kontenerow nie zadzaiala dlatego:
+		if (std::find(k.begin(), k.end(), 4) != k.end()) {
+			std::cout << "Znaleziono wartosc 4"<<std::endl;
+		}
+		else {
+			std::cout << "Nie znaleziono wartosci 4"<<std::endl;
+		}
+
+		if ((std::find_if(k.begin(), k.end(), [](int x) {
+			return x % 4 == 0;
+			})) != k.end()) {
+			std::cout<<"Znaleziono liczbe podzielna przed 4"<<std::endl;
+		}
+		else 
+			std::cout<<"Nie znaleziono"<<std::endl;
+		if ((std::find_if_not(k.begin(), k.end(), [](int x) {
+			return x % 4 == 0;
+			})) != k.end()) {
+			std::cout << "Znaleziono liczbe nie podzielna przed 4" << std::endl;
+		}
+
+		if ((std::adjacent_find(k.begin(), k.end())) != k.end()) {
+			std::cout << "Znaleziono pare takich samych liczb " << std::endl;
+		}
+		std::vector<int> k1 = { 2,4,6,8,10,10, 12 };
+		std::vector<double> k2 = { 2,4,6,8,10,10 };
+		bool wynik = std::equal(k.begin(), k.end(), k1.begin());
+		if (wynik == 1) {
+			std::cout << "K i k1 sa takie same"  << std::endl;// PLAPKA k1 jest dluzsze
+		}
+		wynik = std::equal(k.begin(), k.end(), k2.begin());
+		if (wynik == 1) {
+			std::cout << "K i k2 sa takie same" << std::endl;// PLAPKA niejawna tranzycja doubla do inta
+		}
+		//mismatch oddaje iterator na miejsce w ktorym 2 zakresy zaczynaja byc roznce
+		//auto [itmis1, itmis2] = std::mismatch(k1.begin(), k1.end(), k.begin()); dla C++17
+		std::vector<int>::iterator itmis1, itmis2;
+		std::vector<int> k3 = { 1,2,3,4,5,6,7,8,9,10,11 };
+		std::vector<int> k4 = { 1,2,3,4,5,6,7,9,10,11,12,13,14 };
+		std::tie(itmis1, itmis2) = std::mismatch(k3.begin(), k3.end(), k4.begin());
+		std::cout << "Wektory zaczynaja sie roznic w :" << *itmis1 << " " << *itmis2 << std::endl;
+		std::cout<< *(k3.end()-1)<<std::endl; //ostatni element .end() to juz pusta przestrzen (dziala tylko random accesst iteratorami: vector, deque, array
+	
+		//mismatch - do rozwiniecia i kontynuacji.
+
+		//lexicographical_compare
+		std::cout<<"Lexicographical compere "<< std::lexicographical_compare(k3.begin(), k3.end(), k4.begin(), k4.end())<<" wartosc bool "<< std::endl;
+		std::cout << "Teraz algorytmy modyfikujace, nacisnij przycisk" << std::endl;
+		std::cin.get();
+		system("cls");
+
+		std::vector<int> k5 = { 1,2,1,5,1,0,-4 };
+		std::list<int> k6 = { 1,1,2,4,5,8,10,11 };
+		std::cout << "Copy:" << std::endl;
+		std::copy(k5.begin(), k5.end(), k6.begin());
+		
+		for (auto x : k6) {
+			std::cout << x << " ";
+		}
+		//co tu sie wydarzylo? skopiowalo od 1, -4 z k5 do k6, ze k6 jest wieksze to zostalo 11
+		std::cout<<std::endl;
+		std::cout << "Copy_if:" << std::endl;
+		k5.clear();
+		k5 = { 1,5,5 };
+		std::copy_if(k5.begin(), k5.end(),
+			k6.begin(),
+			[](int x) { return x % 5 == 0; }
+		);
+		for (auto x : k6) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Copy_n:" << std::endl;
+		k5.clear(); // niepotrzebne
+		k5 = { 2,5,1, 7,7,7,4,1,7 }; //to samo w sobie robi clear 
+		std::copy_n(k5.begin(), 4, k6.begin());// wpisuje 4 pierwsze elementy z k5 do k6
+		for (auto x : k6) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		k5 = { 1,1,1,1,1,1,1 };
+		std::cout << "Move:" << std::endl;
+		std::cout << "K5:" << std::endl;
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::move(k5.begin(), k5.begin()+3, k6.begin());// Przenosi k6 przejmuje dane
+		std::cout <<std::endl<<"K6:" << std::endl;
+		for (auto x : k6) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		k5 = { 2,6,-4,-3,5,23};
+		std::cout << "Transform:" << std::endl;
+		std::transform(k5.begin(), k5.end(), k6.begin(),
+			[](int x) {
+				return x * x * x;
+			});
+		std::cout << "K5:" << std::endl;
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl << "K6:" << std::endl;
+		for (auto x : k6) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
 
 
 
-
-
-
-
-
-	// Inne kontenery na pozniej
 
 	//algorytmy Stl - zrobione na labolatoriach
 
