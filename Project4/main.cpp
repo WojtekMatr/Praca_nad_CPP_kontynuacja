@@ -20,6 +20,7 @@
 #include <clocale>// slaby sposob na tworzenie znakow polskich w terminalu (lepszy to Windows.h) i kodowanie wyjscia na UTF-8 SetConsoleOutputCP(65001); 
 #include <Windows.h>
 #include <algorithm>
+#include <utility>//swap
 int main() {
 	SetConsoleOutputCP(65001);
 	SetConsoleCP(65001);
@@ -488,6 +489,7 @@ int main() {
 
 		std::vector<int> k5 = { 1,2,1,5,1,0,-4 };
 		std::list<int> k6 = { 1,1,2,4,5,8,10,11 };
+		std::vector<int> k7 = { 1 };
 		std::cout << "Copy:" << std::endl;
 		std::copy(k5.begin(), k5.end(), k6.begin());
 		
@@ -543,7 +545,170 @@ int main() {
 		}
 		std::cout << std::endl;
 
+		std::cout << "Swap: " << std::endl;
+		std::swap(k5,k7);// zamienia miejscami ale kontenery musza byc tego samego typu, i atrybuty tez
+		std::cout << "Swap_rages: " << std::endl;
+		k5 = { 1,2,3,4,5,6,7,8,9 };
+		k7 = { 10,11,12,13,14,15,16,17,18,19 };
+		std::vector<int> k8 = { 21,22 };
+		std::swap_ranges(k5.begin(), k5.begin() + 4, k7.begin());
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
 
+		for (auto x : k7) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		//std::swap_ranges(k5.begin(), k5.begin() + 4, k8.begin());
+		//for (auto x : k5) {
+		//	std::cout << x << " ";
+		//}
+		//std::cout << std::endl;
+
+		//for (auto x : k8) {
+		//	std::cout << x << " ";
+		//}
+		//std::cout << std::endl; nie moze swapowac dluzsza wartosc na krotszy kontener
+		std::cout << "Fill: " << std::endl;
+		std::fill(k5.begin(), k5.begin() + 4, 0);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "Fill_n: " << std::endl;
+		std::fill_n(k5.begin(),2, 111
+		);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		int x = 2;
+		std::cout << "Generate: " << std::endl;
+		std::generate(k5.begin(), k5.begin() + 4, [&]() {
+			return x*(++x);
+			}
+		);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Generate_n: " << std::endl;
+		std::generate_n(k5.begin(), 3, [&]() {
+			return x * (++x);
+			}
+		);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "Remove: " << std::endl;
+		std::remove(k5.begin(), k5.end(), 7);//remove zle dziala przesuwa smiecie, w tym przypadku 9 na koniec kontenera ale nie usuwa tego. by to naprawic uzywamy
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+
+		std::cout << "Prawidlowe usuwanie, bez smieci Erese+Remove: " << std::endl;
+
+		k5.erase(std::remove(k5.begin(), k5.end(), 9), k5.end());
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		auto itNew = std::remove_if(k5.begin(), k5.end(), [](int x) {
+			return x % 2 == 0;
+
+			});
+
+		k5.erase(itNew, k5.end());
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout <<"Replace"<< std::endl;
+		k5 = { 1,1,1,1,2,3,4,1 };
+		std::replace(k5.begin(), k5.end(), 1, 99);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Replace_if" << std::endl;
+
+		std::replace_if(k5.begin(), k5.end(), [](int x) {
+			return x % 99 == 0;
+			},
+			98);
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Replace_copy" << std::endl;
+
+		std::vector<int> k9;
+		//std::replace_copy(k5.begin(), k5.end(), k9.begin(), 98, 97);
+		//Niebezpiecznie poniewaz nie wiemy czy k9 bedzie mialo tyle pamieci
+		std::replace_copy(k5.begin(), k5.end(), std::back_inserter(k9), 98, 97);
+		//BACK INSERTER NIE ROZUMIEM WROCIC!!!!!!!!!!!!!!
+		
+		std::cout << "K5:" << std::endl;
+		for (auto x : k5) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "K9:" << std::endl;
+		for (auto x : k9) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "Replace_copy_if" << std::endl;
+		std::replace_copy_if(k5.begin(), k5.end(), std::back_inserter(k9), [](int x) {
+			return x == 98;
+			}, 96);
+		std::cout << "K9:" << std::endl;
+		for (auto x : k9) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		std::reverse(k9.begin(), k9.end());
+
+		std::cout << "Reverse"<<std::endl<<"K9:" << std::endl;
+		for (auto x : k9) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "Rotate" << std::endl << "K9:" << std::endl;
+		std::rotate(k9.begin(), k9.begin() + 5, k9.end());
+
+		for (auto x : k9) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Unique" << std::endl << "K9:" << std::endl;
+
+		itNew = std::unique(k9.begin(), k9.end()); 
+		//usuwa duplikaty KOLOSIEBIE LEZACE
+		k9.erase(itNew, k9.end());
+		for (auto x : k9) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "Unique_copy" << std::endl << "K9:" << std::endl;
+
+		std::vector<int> k10;
+		std::unique_copy(k9.begin(), k9.end(), std::back_inserter(k10));
+		for (auto x : k10) {
+			std::cout << x << " ";
+		}
+		std::cout << std::endl;
 
 
 	//algorytmy Stl - zrobione na labolatoriach
