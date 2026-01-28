@@ -4,6 +4,11 @@
 #include <set> 
 #include <ostream>
 //moze tez byc pragma once ale jest to mniej dokladne
+struct Osoby {
+    std::string imie;
+    int indeks;
+};
+
 
 void wydrukuj(int i);
 struct Punkt1 {

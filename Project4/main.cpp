@@ -710,6 +710,69 @@ int main() {
 		}
 		std::cout << std::endl;
 
+		//Algorytmy sortujace i porzadkujace
+
+		std::sort(k9.begin(), k9.end());
+		std::cout << "Zwykle sortowanie\n";
+		for (auto i : k9) {
+			std::cout << i << " ";
+		}
+		std::cout << std::endl;
+		std::sort(k9.begin(), k9.end(), [](int a, int b) {
+			return a > b;
+			}
+
+
+		);
+		for (auto i : k9) {
+			std::cout << i << " ";
+		}
+		std::cout << std::endl;
+		//sort jest niestabliny bo moze zle potraktowac takie same wartosci
+		// mamy struck <string, int>
+		// sortujemy po intach stringi sie nie sortuja
+		// 
+		// 
+		//funktory:
+		//std::less<> rosnaco
+		//std::greater<> malejaco
+		//std::less_equal<> <=
+		//std::greater_equal<> >=
+		//std::equal_to<> ==
+		//std::not_equal_to !=
+		//std::logical_and<> and
+		//std::logical_or<> or
+		//std::logical_not<> not
+		//std::plus<> +
+		//std::minus<> -
+		//std::multiplies<> *
+		//std::divides<> /
+		//std::modulus<> %
+		//std::negate<> zamienia znak
+		std::vector<Osoby> vectorOsob = { {"Anna", 2},{"Olaf", 3 },{"Olef", 3 },{"Olek", 3 },{"Arek", 3 }, {"Ola", 3},{"Tomasz",2 }, {"Michal", 4}, {"Aa", 1}, {"A", 2}, {"Jakub", 5}};
+		std::cout << "\n";
+		for (auto i : vectorOsob) {
+			std::cout << "{" << i.imie << ", " << i.indeks << "}";
+		}
+		std::sort(vectorOsob.begin(), vectorOsob.end(), [](Osoby a, Osoby b) {
+			return a.indeks < b.indeks;
+
+			});
+		std::cout << "\n";
+		for (auto i : vectorOsob) {
+			std::cout <<"{"<< i.imie << ", "<<i.indeks<<"}";
+		}
+		std::stable_sort(vectorOsob.begin(), vectorOsob.end(), [](Osoby a, Osoby b) {
+			return a.indeks < b.indeks;
+
+			});
+		std::cout << "\n";
+
+		for (auto i : vectorOsob) {
+			std::cout << "{" << i.imie << ", " << i.indeks << "}";
+		}
+	
+
 
 	//algorytmy Stl - zrobione na labolatoriach
 
