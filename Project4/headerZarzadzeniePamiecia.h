@@ -99,7 +99,7 @@ class B_z_weak {
 public:
 	B_z_weak(std::weak_ptr<A> a) {
 		this->a = a;
-		std::cout << "Powstaje B z shared ptr A\n";
+		std::cout << "Powstaje B z weak ptr A\n";
 	}
 	~B_z_weak() {
 		std::cout << "Zniszono B\n";
